@@ -45,10 +45,11 @@
 }
 .raw {
   /* visibility:hidden; */
-  display:none;
+  /* display:none; */
 }
-#switch.on > .raw{
+#switch.on > * .raw{
   /* visibility:visible */
+  display:block;
 }
 </style>
 </head>
@@ -251,7 +252,7 @@
     
     <div class="card-body">
       <div class="table-responsive">
-        <div id="switch" class="float-right off "><i id="on" class="fas fa-toggle-on"></i><i id="off" class="fas fa-toggle-off"></i></div>
+        <div id="switch" class="float-right on "><i id="on" class="fas fa-toggle-on"></i><i id="off" class="fas fa-toggle-off"></i></div>
 
           <button class="btn btn-primary addcomp" id="AddComponent"><i class="fas fa-plus-square"></i></button>
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -272,17 +273,21 @@
                 <th>Unit</th>
                 <th>Design 1 
                   <div class="raw">
-                    <div id="d1Normaliser" class="alert alert-info small" data-d1Normaliser="" >Norm divisor: </div>
+                    <div id="d1CaNormaliser" class="alert alert-info small" data-d1Normaliser="" >Ca Norm divisor: </div>
+                    <div id="d1TaNormaliser" class="alert alert-info small" data-d1TaNormaliser="" >Ta Norm divisor: </div>
+
                   </div>
                 </th>
                 <th>Design 2 
                   <div class="raw">    
-                    <div id="d2Normaliser" class="alert alert-info small" data-d2Normaliser="" >Norm divisor: </div>
+                    <div id="d2CaNormaliser" class="alert alert-info small" data-d2Normaliser="" >Ca Norm divisor: </div>
+                    <div id="d2TaNormaliser" class="alert alert-info small" data-d2TaNormaliser="" >Ta Norm divisor: </div>
                   </div>
                 </th>
                 <th>Design 3
                   <div class="raw">
-                    <div id="d3Normaliser" class="alert alert-info small" data-d3Normaliser="" >Norm divisor: </div>
+                    <div id="d3CaNormaliser" class="alert alert-info small" data-d3Normaliser="" >Ca Norm divisor: </div>
+                    <div id="d3TaNormaliser" class="alert alert-info small" data-d3TaNormaliser="" >Ta Norm divisor: </div>
                   </div>
                 </th>
             </tr>

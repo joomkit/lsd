@@ -79,11 +79,14 @@ function design1TextInputChange(e)
 {
   console.log("design1TextInputChange");
   this.dataset.design1CarbonAbsolute = removeExponent((partSelected.dataset.partCarbonEmission * this.value));
-  this.dataset.design1ToxicityAbsolute = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
-  $('td.design1-cell .raw .ca').text("a: " + this.dataset.design1CarbonAbsolute);
+  this.dataset.design1ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
   
   calcCarbonDesign1Normalisers();
-  $('td.design1-cell .raw .cn').text("n: " + d2Normaliser.value);
+  console.log(this.dataset.design1CarbonAbsolute);
+  $('td.design1-cell .raw .ca').text("Ca: " + this.dataset.design1CarbonAbsolute);
+  $('td.design1-cell .raw .cn').text("Cn: " + this.dataset.design1CarbonNormalised);
+  $('td.design1-cell .raw .tx').text("Ta: " + removeExponent(this.dataset.design1ToxicityAbsolute));
+  $('td.design1-cell .raw .tn').text("Tn: " + this.dataset.design1ToxicityNormalised);
 }
 
 function design2TextInputChange(e) 
@@ -91,44 +94,27 @@ function design2TextInputChange(e)
   console.log("design2TextInputChange");
   this.dataset.design2CarbonAbsolute = removeExponent((partSelected.dataset.partCarbonEmission * this.value));
   this.dataset.design2ToxicityAbsolute = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
-  $('td.design2-cell .raw .ca').text("a: " + this.dataset.design2CarbonAbsolute);
   
   calcCarbonDesign2Normalisers();
 
-  $('td.design2-cell .raw .cn').text("n: " + d2Normaliser.value);
+  $('td.design2-cell .raw .ca').text("Ca: " + this.dataset.design2CarbonAbsolute);
+  $('td.design2-cell .raw .cn').text("Cn: " + this.dataset.design2CarbonNormalised);
+  $('td.design2-cell .raw .tx').text("Ta: " + this.dataset.design2ToxicityAbsolute);
+  $('td.design2-cell .raw .tn').text("Tn: " + this.dataset.design2ToxicityNormalised);
 }
 function design3TextInputChange(e) 
 {
   console.log("design3TextInputChange");
   this.dataset.design3CarbonAbsolute = removeExponent((partSelected.dataset.partCarbonEmission * this.value));
   this.dataset.design3ToxicityAbsolute = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
-  
-  //"abs " + (partSelected.dataset.partHumanToxicity * this.value);
-  var testN = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
 
-  $('td.design3-cell .raw .ca').text("a: " + this.dataset.design3CarbonAbsolute);
+
   calcCarbonDesign3Normalisers();
-  $('td.design3-cell .raw .cn').text("n: " + d3Normaliser.value);
+  $('td.design3-cell .raw .ca').text("Ca: " + this.dataset.design3CarbonAbsolute);
+  $('td.design3-cell .raw .cn').text("Cn: " + this.dataset.design3CarbonNormalised);
+  $('td.design3-cell .raw .tx').text("Ta: " + this.dataset.design3ToxicityAbsolute);
+  $('td.design3-cell .raw .tn').text("Tn: " + this.dataset.design3ToxicityNormalised);
 }
-
-//select listener function calcs
-// function design1SelectInputChange(e) {
-//   console.log("design1SelectInputChange");
-//   console.log(partSelected.dataset.partCarbonEmission);
-//   this.dataset.design1CarbonAbsolute = (partSelected.dataset.partCarbonEmission * this.value);
-//   this.dataset.design1ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
-  
-// }
-// function design2SelectInputChange(e) {
-//   console.log("design2SelectInputChange");
-//   this.dataset.design2CarbonAbsolute = (partSelected.dataset.partCarbonEmission * this.value);
-//   this.dataset.design2ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
-// }
-// function design3SelectInputChange(e) {
-//   console.log("design3SelectInputChange");
-//   this.dataset.design3CarbonAbsolute = (partSelected.dataset.partCarbonEmission * this.value);
-//   this.dataset.design3ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
-// }
 
 /* carbon normalised 
  * = carbon absolute divided by the sum total of all carbon absolutes for design
@@ -138,26 +124,40 @@ function calcCarbonDesign1Normalisers()
   //get all elements of carbon raw values 
   var design1Element =  document.querySelectorAll(".design1");
   
-  var total = 0;
-  // loop thru absolute carbon values and total them up
+  var totalCa = 0;
+  var totalTa = 0;
+
+  // TOTALs
+  //loop thru absolute  values and total them up
   for(i = 0; i< design1Element.length; i++){  
-    total += parseFloat(design1Element[i].dataset.design1CarbonAbsolute);
+    totalCa += parseFloat(design1Element[i].dataset.design1CarbonAbsolute);
+    totalTa += parseFloat(design1Element[i].dataset.design1ToxicityAbsolute);   
   }
+
+  //remove scientic notation
+  totalCa = removeExponent(totalCa);
+  totalTa = removeExponent(totalTa);
+ 
   //store normaliser 
-  d1Normaliser.dataset.d1normaliser = total;
-  d1Normaliser.value = total;
+  //store in data attrinute
+  d1CaNormaliser.dataset.d1normaliser = totalCa;
+  d1TaNormaliser.dataset.d1normaliser = totalTa;
+  
+  //store in global scope
+  d1CaNormaliserValue = totalCa;
+  d1TaNormaliserValue = totalTa;
 
   //show  the divisor
-  $('#d1Normaliser').text("Normal divisor:" + total);
-  
-  console.log(typeof parseIntd1NormaliserValue);
+  $('#d1CaNormaliser').text("Ca norm divisor:" + totalCa);
+  $('#d1TaNormaliser').text("Ta norm divisor:" + totalTa);
 
-  //now loop thru all design 1 elements and set the carbon normalised value
+  //SET value
+  //now loop thru all design 1 elements and set the  normalised values for carbon and Toxicitiy
   for(i = 0; i< design1Element.length; i++){  
-    carbAbsolute = design1Element[i].dataset.design1CarbonAbsolute;
-    carbNormaliser = Math.floor(d1NormaliserValue);  
-    design1Element[i].dataset.design1CarbonNormalised = (design1Element[i].dataset.design1CarbonAbsolute /  d1Normaliser.value) ; //(parseFloat(design1Element[i].dataset.design1CarbonAbsolute) / parseFloat(d1NormaliserValue) )
+    design1Element[i].dataset.design1CarbonNormalised = (design1Element[i].dataset.design1CarbonAbsolute / totalCa);
+    design1Element[i].dataset.design1ToxicityNormalised = (design1Element[i].dataset.design1ToxicityAbsolute / totalTa);
   }
+
 }
 
 function calcCarbonDesign2Normalisers()
@@ -165,63 +165,81 @@ function calcCarbonDesign2Normalisers()
   //get all elements of carbon raw values 
   var design2Element =  document.querySelectorAll(".design2");
   
-  var total = 0;
-  // loop thru absolute carbon values and total them up
+  var totalCa = 0;
+  var totalTa = 0;
+
+  // TOTALs
+  //loop thru absolute  values and total them up
   for(i = 0; i< design2Element.length; i++){  
-    total += parseFloat(design2Element[i].dataset.design2CarbonAbsolute);
+    totalCa += parseFloat(design2Element[i].dataset.design2CarbonAbsolute);
+    totalTa += parseFloat(design2Element[i].dataset.design2ToxicityAbsolute);
   }
+
+  //remove scientic notation
+  totalCa = removeExponent(totalCa);
+  totalTa = removeExponent(totalTa);
+ 
   //store normaliser 
-  d2Normaliser.dataset.d2normaliser = total;
-  d2Normaliser.value = total;
+  //store in data attrinute
+  d2CaNormaliser.dataset.d2normaliser = totalCa;
+  d2TaNormaliser.dataset.d2normaliser = totalTa;
+  
+  //store in global scope
+  d2CaNormaliserValue = totalCa;
+  d2TaNormaliserValue = totalTa;
 
   //show  the divisor
-  $('#d2Normaliser').text("Normal divisor:" + total);
-  
-  console.log(typeof parseIntd2NormaliserValue);
+  $('#d2CaNormaliser').text("Ca norm divisor:" + totalCa);
+  $('#d2TaNormaliser').text("Ta norm divisor:" + totalTa);
 
-  //now loop thru all design 2 elements and set the carbon normalised value
+  //SET value
+  //now loop thru all design 2 elements and set the  normalised values for carbon and Toxicitiy
   for(i = 0; i< design2Element.length; i++){  
-    carbAbsolute = design2Element[i].dataset.design2CarbonAbsolute;
-    carbNormaliser = Math.floor(d2NormaliserValue);    
-    design2Element[i].dataset.design2CarbonNormalised = (design2Element[i].dataset.design2CarbonAbsolute /  d2Normaliser.value) ; //(parseFloat(design2Element[i].dataset.design2CarbonAbsolute) / parseFloat(d2NormaliserValue) )
+    design2Element[i].dataset.design2CarbonNormalised = (design2Element[i].dataset.design2CarbonAbsolute / totalCa);
+    design2Element[i].dataset.design2ToxicityNormalised = (design2Element[i].dataset.design2ToxicityAbsolute / totalTa);
   }
-}
 
+}
 function calcCarbonDesign3Normalisers()
 {
   //get all elements of carbon raw values 
   var design3Element =  document.querySelectorAll(".design3");
   
-  var total = 0;
-  // loop thru absolute carbon values and total them up
-  for(i = 0; i< design3Element.length; i++){  
-    console.log(typeof design3Element[i].dataset.design3CarbonAbsolute)
-    console.log(typeof parseFloat(design3Element[i].dataset.design3CarbonAbsolute));
-    total += parseFloat(design3Element[i].dataset.design3CarbonAbsolute);
-  }
-  //store normaliser 
-  console.log("total = " + total);
+  var totalCa = 0;
+  var totalTa = 0;
 
-  d3Normaliser.dataset.d3normaliser = total;
-  d3Normaliser.value = total;
+  // TOTALs
+  //loop thru absolute  values and total them up
+  for(i = 0; i< design3Element.length; i++){  
+    totalCa += parseFloat(design3Element[i].dataset.design3CarbonAbsolute);
+    totalTa += parseFloat(design3Element[i].dataset.design3ToxicityAbsolute);    
+  }
+
+  //remove scientic notation
+  totalCa = removeExponent(totalCa);
+  totalTa = removeExponent(totalTa);
+ 
+  //store normaliser 
+  //store in data attrinute
+  d3CaNormaliser.dataset.d3normaliser = totalCa;
+  d3TaNormaliser.dataset.d3normaliser = totalTa;
+  
+  //store in global scope
+  d3CaNormaliserValue = totalCa;
+  d3TaNormaliserValue = totalTa;
 
   //show  the divisor
-  $('#d3Normaliser').text("Normal divisor:" + total);
-  
-  console.log(typeof parseIntd3NormaliserValue);
+  $('#d3CaNormaliser').text("Ca norm divisor:" + totalCa);
+  $('#d3TaNormaliser').text("Ta norm divisor:" + totalTa);
 
-  //now loop thru all design 3 elements and set the carbon normalised value
+  //SET value
+  //now loop thru all design 3 elements and set the  normalised values for carbon and Toxicitiy
   for(i = 0; i< design3Element.length; i++){  
-    carbAbsolute = design3Element[i].dataset.design3CarbonAbsolute;
-    carbNormaliser = Math.floor(d3NormaliserValue);
-    console.log(carbAbsolute);
-    console.log(typeof carbAbsolute);
-    console.log(carbNormaliser);
-    console.log(typeof carbNormaliser); 
-    
-    design3Element[i].dataset.design3CarbonNormalised = (design3Element[i].dataset.design3CarbonAbsolute /  d3Normaliser.value) ; //(parseFloat(design3Element[i].dataset.design3CarbonAbsolute) / parseFloat(d3NormaliserValue) )
+    design3Element[i].dataset.design3CarbonNormalised = (design3Element[i].dataset.design3CarbonAbsolute / totalCa);
+    design3Element[i].dataset.design3ToxicityNormalised = (design3Element[i].dataset.design3ToxicityAbsolute / totalTa);
   }
 }
+
 
 function removeExponent(value) {
   // if value is not a number try to convert it to number
@@ -306,8 +324,8 @@ $('#dataTable').on('mouseover mouseout', '.dosomething', function(){
   // occurs on elements that match '.dosomething'
 });
 
-//d1Normaliser.dataset.d1normaliser = "10000"
-// console.log(d1Normaliser.dataset.d1normaliser);
+//d1CaNormaliser.dataset.d1normaliser = "10000"
+// console.log(d1CaNormaliser.dataset.d1normaliser);
 //   // alert("normski: "+d1NormaliserValue);
 
 //   s  = "6.3858779999999995e-12";
@@ -319,4 +337,21 @@ $('#dataTable').on('mouseover mouseout', '.dosomething', function(){
 //   // d = parseInt(s);//, NumberStyles.Float);
 //   console.log(partSelected);
 
+ //select listener function calcs
+// function design1SelectInputChange(e) {
+//   console.log("design1SelectInputChange");
+//   console.log(partSelected.dataset.partCarbonEmission);
+//   this.dataset.design1CarbonAbsolute = (partSelected.dataset.partCarbonEmission * this.value);
+//   this.dataset.design1ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
   
+// }
+// function design2SelectInputChange(e) {
+//   console.log("design2SelectInputChange");
+//   this.dataset.design2CarbonAbsolute = (partSelected.dataset.partCarbonEmission * this.value);
+//   this.dataset.design2ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
+// }
+// function design3SelectInputChange(e) {
+//   console.log("design3SelectInputChange");
+//   this.dataset.design3CarbonAbsolute = (partSelected.dataset.partCarbonEmission * this.value);
+//   this.dataset.design3ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
+// } 

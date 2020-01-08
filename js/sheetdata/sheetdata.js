@@ -40,15 +40,25 @@ var design1 = { normalised: "", actual: ""};
 var design2 = { normalised: "", actual: ""};
 var design3 = { normalised: "", actual: ""};
 
-//get and set 
-var d1Normaliser = document.querySelector('#d1Normaliser');
-var d1NormaliserValue = d1Normaliser.dataset.d1normaliser;
+//get and set carbon
+var d1CaNormaliser = document.querySelector('#d1CaNormaliser');
+var d1CaNormaliserValue = d1CaNormaliser.dataset.d1normaliser;
 
-var d2Normaliser = document.querySelector('#d2Normaliser');
-var d2NormaliserValue = d2Normaliser.dataset.d2normaliser;
+var d2CaNormaliser = document.querySelector('#d2CaNormaliser');
+var d2CaNormaliserValue = d2CaNormaliser.dataset.d2normaliser;
 
-var d3Normaliser = document.querySelector('#d3Normaliser');
-var d3NormaliserValue = d3Normaliser.dataset.d3normaliser;
+var d3CaNormaliser = document.querySelector('#d3CaNormaliser');
+var d3CaNormaliserValue = d3CaNormaliser.dataset.d3normaliser;
+
+//get and set Tx
+var d1TaNormaliser = document.querySelector('#d1TaNormaliser');
+var d1TaNormaliserValue = d1TaNormaliser.dataset.d1normaliser;
+
+var d2TaNormaliser = document.querySelector('#d2TaNormaliser');
+var d2TaNormaliserValue = d2TaNormaliser.dataset.d2normaliser;
+
+var d3TaNormaliser = document.querySelector('#d3TaNormaliser');
+var d3TaNormaliserValue = d3TaNormaliser.dataset.d3normaliser;
 
 //end normalisers
 
@@ -235,8 +245,10 @@ function getTemplateGrams(unit,i)
                         '</div>'+
                       '</div>' +
                       '<div class="col-12 raw small">' + 
-                      '<div class="alert alert-primary abs" role="alert"></div>' +
-                      '<div class="alert alert-primary norm" role="alert"></div>' +
+                      '<div class="alert alert-primary ca" role="alert"></div>' +
+                      '<div class="alert alert-primary cn" role="alert"></div>' +
+                      '<div class="alert alert-primary tx" role="alert"></div>' +
+                      '<div class="alert alert-primary tn" role="alert"></div>' +
                       '</div>';
   return gramsTemplate;                      
 }
