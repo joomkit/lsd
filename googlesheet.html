@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current');   // Don't need to specify chart libraries!
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      var key = 'AIzaSyA2jRvS1F2HOJrwCfV_Wd_E0GC2l7ImnFs';
+      var dataComponents = 'https://sheets.googleapis.com/v4/spreadsheets/1DlfO9U5jPQWgL9edzvTKLsXRAPX1EmRvxyJnoYmPJvc/values/Data source!B2:B89?key='+ key;
+
+        
+      // Data source'!$C:$C, 'Data source'!$B:$B=A1
+      // values:batchGet?ranges=Data source!$C:$C&ranges=Data source!$B:$B=A1&key=AIzaSyA2jRvS1F2HOJrwCfV_Wd_E0GC2l7ImnFs
+      // https://sheets.googleapis.com/v4/spreadsheets/1DlfO9U5jPQWgL9edzvTKLsXRAPX1EmRvxyJnoYmPJvc/values/Lists?key=AIzaSyA2jRvS1F2HOJrwCfV_Wd_E0GC2l7ImnFs
+
+
+
+
+      function drawVisualization() {
+        var wrapper = new google.visualization.ChartWrapper({
+          chartType: 'LineChart',
+          dataSourceUrl: 'http://spreadsheets.google.com/tq?key=pCQbetd-CptGXxxQIG7VFIQ&pub=1',
+        
+          query: 'SELECT A,D WHERE D > 100 ORDER BY D',
+          options: {'title': 'Countries'},
+          containerId: 'vis_div'
+        });
+        wrapper.draw()
+      }
+</script>
+  </head>
+  <body style="font-family: Arial;border: 0 none;">
+    <div id="vis_div" style="width: 600px; height: 400px;"></div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-chained/1.0.1/jquery.chained.remote.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-chained/1.0.1/jquery.chained.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+  
+  window.googleDocCallback = function () { return true; };
+      // feed test apiv4
+   
+      var spreadsheetID = "1DlfO9U5jPQWgL9edzvTKLsXRAPX1EmRvxyJnoYmPJvc";
+  var url = "https://sheets.googleapis.com/v4/spreadsheets/1DlfO9U5jPQWgL9edzvTKLsXRAPX1EmRvxyJnoYmPJvc/values:batchGet?ranges=Lists!A1:J32&majorDimension=COLUMNS&key=AIzaSyA2jRvS1F2HOJrwCfV_Wd_E0GC2l7ImnFs";
+  //var url = "https://sheets.googleapis.com/v4/spreadsheets/1DlfO9U5jPQWgL9edzvTKLsXRAPX1EmRvxyJnoYmPJvc/values:batchGet?ranges=Lists!A1:J32&majorDimension=ROWS&key=AIzaSyA2jRvS1F2HOJrwCfV_Wd_E0GC2l7ImnFs";
+  // Assign handlers immediately after making the request,
+// and remember the jqXHR object for this request
+var chaindata = ''; 
+$( document ).ready(function() {
+
+    var jqxhr = $.get(url)
+  
+      .done(function(data) {
+        // alert( "success" );
+        console.log(data);
+        console.log(data.valueRanges[0].values);
+        var chaindata = data.valueRanges[0].values;
+      })
+      .fail(function() {
+        alert( "error" );
+      })
+      .always(function() {
+        // alert( "complete" );
+      });
+  //chained
+  jQuery("#series").remoteChained({
+  
+  parents : "#mark",
+  url : url,
+  data: function (json) {
+      return json.data;
+      console.log(son.data);
+  }
+  
+});  
+});
+
+
+    </script>
+    <select id="mark" name="mark">
+      <option value="">--</option>
+      <option value="bmw">BMW</option>
+      <option value="audi">Audi</option>
+  </select>
+  <select id="series" name="series">
+      <option value="">--</option>
+  </select>
+  <select id="model" name="model">
+      <option value="">--</option>
+  </select>
+  <select id="engine" name="engine">
+      <option value="">--</option>
+  </select>
+  </body>
+</html>

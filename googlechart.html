@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        // var data = new google.visualization.DataTable();
+        // data.addColumn('string', 'Topping');
+        // data.addColumn('number', 'Slices');
+        // data.addRows([
+        //   ['Battery', 3],
+        //   ['Onions', 1],
+        //   ['Olives', 1],
+        //   ['Zucchini', 1],
+        //   ['Pepperoni', 2]
+        // ]);
+
+        var data = google.visualization.arrayToDataTable([
+        ['TYPE',
+        'BATTERY', 
+        'CABLE', 
+        'DONGLE', 
+        'ELASTOMERS', 
+        'FEET',
+         'METAL', 
+         'PLASTIC FOAM', 
+         'PLASTIC SHEET/FILM',
+         'RIGID PLASTIC',
+         'PCBA',
+         { role: 'annotation' } ],
+
+         ['DESIGN 1', 0.000 , 0.338 , 0.573 , 0.056 , 0.005 , 0.000 , 0.002 , 0.002 , 0.022 , 0.001,''],
+        ['DESIGN 2', 0.000 , 0.676,1.146 , 0.111 , 0.011 , 0.000 , 0.004 , 0.005 , 0.044 , 0.002 ,''],
+        ['DESIGN 3', 0.000,1.014,1.719 , 0.167 , 0.016 , 0.000 , 0.006 , 0.007 , 0.066 , 0.004 ,'']
+        ]);
+
+      var options = {
+        "title": "ESTIMATED RELATIVE TOXICITY IMPACT",
+        width: 800,
+        height: 600,
+        legend: { position: 'right', maxLines: 4 },
+        bar: { groupWidth: '85%' },
+        //isStacked: 'percent'
+        isStacked: 'true'
+      };
+
+        // Set chart options
+        // var options = {'title':'How Much Pizza I Ate Last Night',
+        //                'width':800,
+        //                'height':600};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div" style="min-width:600px;"></div>
+  </body>
+</html>
