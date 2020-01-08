@@ -21,6 +21,35 @@
   <link href="css/sb-admin.css" rel="stylesheet">
 <style>.addedrow{background: yellow;}
 .cellBg{background-color: aquamarine;}
+/* table tr th:nth-child(1), table tr td:nth-child(1){
+ display:none;
+} */
+.norm,.abs{ font-size:11px; padding:4px}
+
+.fa-toggle-on{
+  display: none;
+}
+
+#switch.off .fa-toggle-on{
+  display:none;
+}
+#switch.off .fa-toggle-off{
+  display:inline-block;
+}
+
+#switch.on .fa-toggle-on{
+  display:inline-block;
+}
+#switch.on .fa-toggle-off{
+  display:none;
+}
+.raw {
+  /* visibility:hidden; */
+  display:none;
+}
+#switch.on > .raw{
+  /* visibility:visible */
+}
 </style>
 </head>
 
@@ -222,6 +251,8 @@
     
     <div class="card-body">
       <div class="table-responsive">
+        <div id="switch" class="float-right off "><i id="on" class="fas fa-toggle-on"></i><i id="off" class="fas fa-toggle-off"></i></div>
+
           <button class="btn btn-primary addcomp" id="AddComponent"><i class="fas fa-plus-square"></i></button>
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
@@ -239,14 +270,25 @@
                <th>Component</th>
                 <th>Part detail</th>
                 <th>Unit</th>
-                <th>Design 1<input id="d1Normaliser" type="hidden" data-d1Normaliser="1.3">
+                <th>Design 1 
+                  <div class="raw">
+                    <div id="d1Normaliser" class="alert alert-info small" data-d1Normaliser="" >Norm divisor: </div>
+                  </div>
                 </th>
-                <th>Design 2 <input id="d2Normaliser" type="hidden" data-d2Normaliser="2.3"></th>
-                <th>Design 3<input id="d3Normaliser" type="hidden" data-d3Normaliser="3.3"></th>
+                <th>Design 2 
+                  <div class="raw">    
+                    <div id="d2Normaliser" class="alert alert-info small" data-d2Normaliser="" >Norm divisor: </div>
+                  </div>
+                </th>
+                <th>Design 3
+                  <div class="raw">
+                    <div id="d3Normaliser" class="alert alert-info small" data-d3Normaliser="" >Norm divisor: </div>
+                  </div>
+                </th>
             </tr>
           </tfoot>
           <tbody>
-            <tr id="1" class="comp-row">
+            <tr id="0" class="comp-row">
              
               <td> 
                 <div class="form-group mb-0">
@@ -269,11 +311,21 @@
                 
               </td>
               <td class="design design1-cell">
-                
+                <div class="input-group mb-3">
+                  <select class="custom-select design" data-design1-normalised="" data-design1-actual="" disabled>
+                    <option selected>Choose...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                  <div class="input-group-append">
+                    <label class="input-group-text unit-label" for="unit">-</label>
+                  </div>
+                </div>
               </td>
               <td class="design design2-cell">
                 <div class="input-group mb-3">
-                  <select class="custom-select design1" data-design2-normalised="" data-design2-actual="" id="unit" disabled>
+                  <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
                     <option selected>Choose...</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -286,7 +338,7 @@
               </td>
               <td class="design design3-cell">
                 <div class="input-group mb-3">
-                  <select class="custom-select design1" data-design2-normalised="" data-design2-actual="" id="unit" disabled>
+                  <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
                     <option selected>Choose...</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -296,6 +348,7 @@
                     <label class="input-group-text unit-label" for="unit">-</label>
                   </div>
                 </div>
+                
               </td>
             </tr>
           
@@ -323,11 +376,21 @@
                 
                 </td>
                 <td class="design design1-cell">
-                  
+                  <div class="input-group mb-3">
+                    <select class="custom-select design" data-design1-normalised="" data-design1-actual=""  disabled>
+                      <option selected>Choose...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                    <div class="input-group-append">
+                      <label class="input-group-text unit-label" for="unit">-</label>
+                    </div>
+                  </div>
                 </td>
                 <td class="design design2-cell">
                   <div class="input-group mb-3">
-                    <select class="custom-select design1" data-design2-normalised="" data-design2-actual="" id="unit" disabled>
+                    <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
                       <option selected>Choose...</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
@@ -340,7 +403,7 @@
                 </td>
                 <td class="design design3-cell">
                   <div class="input-group mb-3">
-                    <select class="custom-select design1" data-design2-normalised="" data-design2-actual="" id="unit" disabled>
+                    <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
                       <option selected>Choose...</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
