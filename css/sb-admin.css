@@ -256,7 +256,21 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
+#dataTable td:nth-child(2){
+  width:180px;
+}
+#dataTable td:nth-child(3){
+  width:300px
+}
+select.form-control.part{
+  max-width:280px;
+}
+select.form-control.component-type{
 
+}
+select>option{
+  max-width: 200px;
+}
 button,
 input {
   overflow: visible;
@@ -10914,4 +10928,13 @@ body.sidebar-toggled footer.sticky-footer {
   body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
+}
+
+tr.white{
+  background-color: #ffffff;
+  -webkit-transition: background 0.5s linear;
+-moz-transition: background 0.5s linear;
+-ms-transition: background 0.5s linear;
+-o-transition: background 0.5s linear;
+transition: background 0.5s linear;
 }

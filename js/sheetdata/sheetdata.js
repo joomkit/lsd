@@ -33,6 +33,7 @@ var partValues = [];
 var unit;
 var activerow;
 var partSelected; // select elemnt selected for part or type
+//var optionSelected; 
 
 //setup normaliser container variables
 
@@ -174,37 +175,41 @@ function getPartValues(valueSelected)
   return partValues; 
 }
 
-function setUnitTemplate(unit,activerow)
+function setUnitTemplate(activerow)
 {
 
-  //screen here for milligrams with specific value
-  //eg if unit contains 'm' then treat as input like grams?
-  console.log('setunittmp');
-  switch(unit) {
-    case 'pcs':
-      // code block
-      cells = activerow.find('td.design');
-      for(i = 0; i< cells.length; i++){  
-        cells[i].innerHTML = getTemplateGrams(unit,i);
-      }
-    break;
-    case 'g':
-      // code block
-      cells = activerow.find('td.design');
-      for(i = 0; i< cells.length; i++){  
-        cells[i].innerHTML = getTemplateGrams(unit,i);
-      }
-      break;
-    case 'm':
-        // code block
-        cells = activerow.find('td.design');
-        for(i = 0; i< cells.length; i++){  
-          cells[i].innerHTML = getTemplateGrams(unit,i);
-        }
-        break;
-    default:
-      // code block
+  cells = activerow.find('td.design');
+  for(i = 0; i< cells.length; i++){  
+    cells[i].innerHTML = getTemplateGrams(i);
   }
+  // //screen here for milligrams with specific value
+  // //eg if unit contains 'm' then treat as input like grams?
+  // console.log('setunittmp');
+  // switch(unit) {
+  //   case 'pcs':
+  //     // code block
+  //     cells = activerow.find('td.design');
+  //     for(i = 0; i< cells.length; i++){  
+  //       cells[i].innerHTML = getTemplateGrams(unit,i);
+  //     }
+  //   break;
+  //   case 'g':
+  //     // code block
+  //     cells = activerow.find('td.design');
+  //     for(i = 0; i< cells.length; i++){  
+  //       cells[i].innerHTML = getTemplateGrams(unit,i);
+  //     }
+  //     break;
+  //   case 'm':
+  //       // code block
+  //       cells = activerow.find('td.design');
+  //       for(i = 0; i< cells.length; i++){  
+  //         cells[i].innerHTML = getTemplateGrams(unit,i);
+  //       }
+  //       break;
+  //   default:
+  //     // code block
+  // }
 }
 
 function getTemplatePcs(unit,i)
@@ -230,12 +235,13 @@ function getTemplatePcs(unit,i)
   return pcsTemplate;
 }
 
-function getTemplateGrams(unit,i)
+function getTemplateGrams(i)
 {
   //start at 1
   i = i + 1;
   var gramsTemplate = '<div class="input-group mb-3">' +
-                        '<input type="text" class="form-control design'+i+'" '+
+                        '<input type="number" class="form-control design'+i+'" '+
+                        'data-design'+i+'-part-name="'+ partValues.componentName +'" '+ 
                         'data-design'+i+'-carbon-normalised="" '+ 
                         'data-design'+i+'-carbon-absolute="" ' +
                         'data-design'+i+'-toxicity-normalised="" ' +
@@ -247,7 +253,7 @@ function getTemplateGrams(unit,i)
                       '<div class="col-12 raw small">' + 
                       '<div class="alert alert-primary ca" role="alert"></div>' +
                       '<div class="alert alert-primary cn" role="alert"></div>' +
-                      '<div class="alert alert-primary tx" role="alert"></div>' +
+                      '<div class="alert alert-primary ta" role="alert"></div>' +
                       '<div class="alert alert-primary tn" role="alert"></div>' +
                       '</div>';
   return gramsTemplate;                      
@@ -270,23 +276,10 @@ function setUnitData(optionSelected)
       activerow = $(optionSelected).closest('tr')
 
       //inject templates
-      setUnitTemplate(unit,activerow);
+      //setUnitTemplate(unit,activerow);
+      setUnitTemplate(activerow);
       
-      //inject data attributes
-      addDataAttributes(activerow, partValues);
       //unitTargetSelect  = activerow.find('.unit-label').addClass('cellBg');
-
-}
-
-// **** ADD VALUES TO DATA-ATTIRBUTES FOR EACH DESIGN CHOICE
-function addDataAttributes(activerow, partValues)
-{
-    // design1.actual = partValues."design1";
-}
-
-//needs to be a listener?
-function createNormaliser()
-{
 
 }
 
@@ -296,7 +289,8 @@ $(document).on('change', 'select', function (e)
   optionSelected = $("option:selected", this);
   var valueSelected = this.value;
   var selectClass = this.className;
-  
+  //fade out highlight
+  optionSelected.closest('tr').addClass('white');
 
     //if component type
     if(selectClass.indexOf('component-type') !== -1){
@@ -304,6 +298,7 @@ $(document).on('change', 'select', function (e)
       partsTargetSelect = $(this).closest('td').next('td').find('select').addClass('gotcha').removeAttr('disabled');
       //add parts list for the chosen component type
       populatePartSelect(valueSelected,partsTargetSelect);
+      
     }
 
     // if part select is selected then get values and populate to data holders
@@ -319,6 +314,7 @@ $(document).on('change', 'select', function (e)
       //set this part selects data attributes with carbon and toxicity values 
       this.dataset.partCarbonEmission = partValues.carbonEmission;
       this.dataset.partHumanToxicity = partValues.humanToxicity;
+      this.dataset.partName = partValues.componentName;
       
       //add UI template elements first
       setUnitData(optionSelected);
@@ -327,42 +323,88 @@ $(document).on('change', 'select', function (e)
       unit = partValues.componentUnit;
       partSelected = this;
       
-      setListeners(unit,partSelected);
+      console.log("part selected = " + partSelected);
+      setListeners(unit,optionSelected);
     }
 });
 
+function setActivePart()
+{
+  
+    // console.log(event.target.closest('select'));
+}
+
 function setListeners(unit,optionSelected)
 {
-  switch(unit) {
-    case 'oldpcs': //select boxes
-    console.log('pcs');
-      // set vars from dynamic elements
-      var design1SelectInput = document.querySelector('select.design1');
-      var design2SelectInput = document.querySelector('select.design2');
-      var design3SelectInput = document.querySelector('select.design3');
-
-      // design1SelectInput.addEventListener('change', design1SelectInputChange);
-      design1SelectInput.oninput = design1SelectInputChange;
-      design2SelectInput.oninput = design2SelectInputChange;
-      design3SelectInput.oninput = design3SelectInputChange;
   
-    break;
-    case 'pcs': 
-    case 'm':
-    case'g':
-      console.log('m or g');
-      // set vars from dynamic elements
-      var design1TextInput = document.querySelector('input.design1');
-      var design2TextInput = document.querySelector('input.design2');
-      var design3TextInput = document.querySelector('input.design3');
+  // just load em ignore unit
+     // set vars from dynamic elements
+     var design1TextInput = document.querySelector('input.design1');
+     var design2TextInput = document.querySelector('input.design2');
+     var design3TextInput = document.querySelector('input.design3');
+
+    //reset active partSelected
+
+   
+
+    design1TextInput.addEventListener('focusin', function(event){
+      event.target.style.background = 'pink';   
+      partSelectEl = $(this).closest('tr').find('select.part');
+      partSelected = partSelectEl[0];
+    });
+
+    design1TextInput.addEventListener('focusout', (event) => {
+      event.target.style.background = '';    
       
-      //add listener functions
-      // design1TextInput.addEventListener('change', design1TextInputChange);
-      design1TextInput.oninput = design1TextInputChange;
-      design2TextInput.oninput = design2TextInputChange;
-      design3TextInput.oninput = design3TextInputChange;
-    break;
-  }
+    });
+  
+
+
+    //  design1TextInput.dataset.design1CarbonAbsolute = removeExponent(partSelected.dataset.partCarbonEmission);
+    //  console.log(optionSelected);
+    //  console.log("part selected ca " + partSelected.dataset.partCarbonEmission)
+    //  console.log("design el selected ca " + design1TextInput.dataset.design1CarbonAbsolute)
+     //add listener functions
+     
+     // design1TextInput.addEventListener('change', design1TextInputChange);
+     design1TextInput.oninput = design1TextInputChange;
+     design2TextInput.oninput = design2TextInputChange;
+     design3TextInput.oninput = design3TextInputChange;
+
+  // if (unit.indexOf('pc') > -1)
+  // {
+  //   unit = "pcs";
+  // }
+  // switch(unit) {
+  //   case 'oldpcs': //select boxes
+  //   console.log('pcs');
+  //     // set vars from dynamic elements
+  //     var design1SelectInput = document.querySelector('select.design1');
+  //     var design2SelectInput = document.querySelector('select.design2');
+  //     var design3SelectInput = document.querySelector('select.design3');
+
+  //     // design1SelectInput.addEventListener('change', design1SelectInputChange);
+  //     design1SelectInput.oninput = design1SelectInputChange;
+  //     design2SelectInput.oninput = design2SelectInputChange;
+  //     design3SelectInput.oninput = design3SelectInputChange;
+  
+  //   break;
+  //   case 'pcs': 
+  //   case 'm':
+  //   case'g':
+  //     console.log('m or g');
+  //     // set vars from dynamic elements
+  //     var design1TextInput = document.querySelector('input.design1');
+  //     var design2TextInput = document.querySelector('input.design2');
+  //     var design3TextInput = document.querySelector('input.design3');
+      
+  //     //add listener functions
+  //     // design1TextInput.addEventListener('change', design1TextInputChange);
+  //     design1TextInput.oninput = design1TextInputChange;
+  //     design2TextInput.oninput = design2TextInputChange;
+  //     design3TextInput.oninput = design3TextInputChange;
+  //   break;
+  // }
 }
 
 

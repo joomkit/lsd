@@ -19,8 +19,10 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
-<style>.addedrow{background: yellow;}
+<style>.addedrow{background: #07e8ff;}
 .cellBg{background-color: aquamarine;}
+.partBgReset{background-color:transparent;}
+.partBg{background-color: red;}
 /* table tr th:nth-child(1), table tr td:nth-child(1){
  display:none;
 } */
@@ -210,12 +212,12 @@
     </div>
 
 <!-- TABBED CARDS CHAAAARTS-->
-<div class="card mb-3">
+<div class="card mb-3 ">
 
   <div class="card-header">
     <i class="fas fa-chart-area"></i>
     Charts calculated </div>
-  <div class="card-body">
+  <div class="card-body hide">
     <div class="alert alert-warning alert-dismissible fade show small" role="alert">
       <i class="fas  fa-lightbulb pr-3"></i> Hover over a bar chart to see a list of values
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -258,6 +260,7 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
+              <th></th>
               <th>Component</th>
               <th>Part detail</th>
               <th>Unit</th>
@@ -268,6 +271,7 @@
           </thead>
           <tfoot>
             <tr>
+              <th></th>
                <th>Component</th>
                 <th>Part detail</th>
                 <th>Unit</th>
@@ -294,11 +298,11 @@
           </tfoot>
           <tbody>
             <tr id="0" class="comp-row">
-             
+             <td><i class="fas fa-minus-circle deleterow"></i></td>
               <td> 
                 <div class="form-group mb-0">
                   <label class="sr-only" for="component">component select</label>
-                    <select class="form-control component-type" id="component">
+                    <select class="form-control component-type" >
                         <option>Please Select</option>
                         
                     </select>
@@ -307,7 +311,7 @@
               <td>
                   <div class="form-group">
                       <label class="sr-only" for="part">part details</label>
-                        <select class="form-control part" id="part" disabled>
+                        <select class="form-control part"  disabled>
                           <option>Please Select</option>
                         </select>
                     </div>
@@ -359,11 +363,12 @@
           
             
             <!-- template row -->
-            <tr id="template" class="comp-row" style="display: none">            
+            <tr id="template" class="comp-row" style="display: none">    
+              <td><i class="fas fa-minus-circle deleterow" onclick = "deleteRow(this)"></i></td>       
              <td> 
                   <div class="form-group mb-0">
                     <label class="sr-only" for="component">component select</label>
-                      <select class="form-control component-type" id="component">
+                      <select class="form-control component-type" >
                           <option>Please Select</option>
                           
                       </select>
@@ -372,7 +377,7 @@
                 <td>
                     <div class="form-group">
                         <label class="sr-only" for="part">part details</label>
-                          <select class="form-control part" id="part" >
+                          <select class="form-control part"  >
                             <option>Please Select</option>
                           </select>
                       </div>

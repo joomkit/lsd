@@ -1,125 +1,103 @@
 //event slisteners for form changes that uodate forms and calculate actual and nrmalised values for design scenarios
 
+// Add event listener to table
+// delRowElement = document.querySelectorAll(".deleterow");
+// delRowElement.addEventListener("click", function(event){
 
-$(function() {
-  $('#AddComponent').click(function(e) {
-    console.log("click");
-    e.preventDefault();
-    var row = 1;
-    // addRow('dataTable');
-    // var node = document.getElementById('template');
-    // table.row.add(rowtemp         
-    // ).draw(false);
-
-    var template = $('#template')
-      .clone()                        // CLONE THE TEMPLATE
-      .attr('id', 'row' + (row++))  
-      .attr('class', 'addedrow').fadeIn()    // MAKE THE ID UNIQUE
-      .prependTo($('#dataTable tbody'))
-      // .appendTo($('#dataTable tbody'))  // APPEND TO THE TABLE
-      .show();                       // SHOW IT
-
-      setTimeout(function(){
-        template.removeClass('addedrow');
-      },2000);
-  });
-});
-
-// var addRowButton = document.querySelector("#AddComponent");
-// addRowButton.addEventListener("click", function(){
-//   addRow('dataTable');
 // });
 
+/*
+ * deletes row and updates dom by running all normalisers
+ */
+function deleteRow(row){
+  var d = row.parentNode.parentNode.rowIndex;
+  document.getElementById('dataTable').deleteRow(d);
 
-function addRow(tableID) {
-  // Get a reference to the table
-  let tableRef = document.getElementById(tableID);
+    // update data
+    calcDesign1Normalisers();
+    calcDesign2Normalisers();
+    calcDesign3Normalisers();
+  
+    //redraw charts?
+}
+function deleteRowOld(e)
+{
+  console.log("del row");
+  // console.log(this);
+  var row = delRowElement.closest('tr');
+  //remove dom element
+  // var elem = document.querySelector(activerow);
+  row.parentNode.removeChild(elem);
 
-  // Insert a row at the end of the table
-  let newRow = tableRef.insertRow(-1);
+  // update data
+  calcDesign1Normalisers();
+  calcDesign2Normalisers();
+  calcDesign3Normalisers();
 
-  // // Insert a cell in the row at index 0
-  // let newCell = newRow.insertCell(0);
+  //redraw charts?
 
-  // // Append a text node to the cell
-  // let newText = document.createTextNode('New bottom row');
-  // newCell.appendChild(newText);
 }
 
-// select chnage listener
-// $('select').on('change', function (e) {
-//   var optionSelected = $("option:selected", this);
-//   var valueSelected = this.value;
-//   console.log(valueSelected);
-//   console.log(data);
-// });
-// // Call addRow() with the table's ID
-
-function populatePartsList(valueSelected){
-  var select = $('#parts');
-
-        var listitems = '';
-        
-        for(i = 0; i< partNames.length; i++){      
-          console.log(partNames.componentName);
-            listitems += '<option value=' + partNames.componentName + '>' + partNames.componentName + '</option>';
-        };
-        
-       
+function round(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 
-
-// design1TextInput.addEventListener('change', design1TextInputChange);
-// design1SelectInput.addEventListener('change', design1SelectInputChange);
-// design2TextInput.addEventListener('change', design2TextInputChange);
-// design2SelectInput.addEventListener('change', design2SelectInputChange);
-// design3TextInput.addEventListener('change', design3TextInputChange);
-// design3SelectInput.addEventListener('change', design3SelectInputChange);
 function design1TextInputChange(e) 
 {
-  console.log("design1TextInputChange");
-  this.dataset.design1CarbonAbsolute = removeExponent((partSelected.dataset.partCarbonEmission * this.value));
-  this.dataset.design1ToxicityAbsolute = (partSelected.dataset.partHumanToxicity * this.value);
+
+  //reset debug display
+  this.closest('td').querySelector('.raw .ca').textContent = "";
+  this.closest('td').querySelector('.raw .ta').textContent = "";
+  this.closest('td').querySelector('.raw .cn').textContent = "";
+  this.closest('td').querySelector('.raw .tn').textContent = "";
+
+
+  //set active partSelect from same row
+  console.log(partSelected.dataset);
+  //remove scientific notation
+  this.dataset.design1CarbonAbsolute = removeExponent(partSelected.dataset.partCarbonEmission) * this.value;
+  this.dataset.design1ToxicityAbsolute = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
   
-  calcCarbonDesign1Normalisers();
-  console.log(this.dataset.design1CarbonAbsolute);
-  $('td.design1-cell .raw .ca').text("Ca: " + this.dataset.design1CarbonAbsolute);
-  $('td.design1-cell .raw .cn').text("Cn: " + this.dataset.design1CarbonNormalised);
-  $('td.design1-cell .raw .tx').text("Ta: " + removeExponent(this.dataset.design1ToxicityAbsolute));
-  $('td.design1-cell .raw .tn').text("Tn: " + this.dataset.design1ToxicityNormalised);
+  console.log(this.dataset.design1CarbonNormalised);
+  calcDesign1Normalisers();
+  console.log(this.dataset.design1ToxicityNormalised);
+
+  this.closest('td').querySelector('.raw .ca').textContent = "Ca: " + this.dataset.design1CarbonAbsolute;
+  this.closest('td').querySelector('.raw .ta').textContent = "Ta: " + this.dataset.design1ToxicityAbsolute;
+  this.closest('td').querySelector('.raw .cn').textContent = 'Cn: '+ round(this.dataset.design1CarbonNormalised, 2);
+  this.closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(this.dataset.design1ToxicityNormalised, 2);
 }
 
 function design2TextInputChange(e) 
 {
-  console.log("design2TextInputChange");
   this.dataset.design2CarbonAbsolute = removeExponent((partSelected.dataset.partCarbonEmission * this.value));
   this.dataset.design2ToxicityAbsolute = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
   
-  calcCarbonDesign2Normalisers();
+  calcDesign2Normalisers();
 
-  $('td.design2-cell .raw .ca').text("Ca: " + this.dataset.design2CarbonAbsolute);
-  $('td.design2-cell .raw .cn').text("Cn: " + this.dataset.design2CarbonNormalised);
-  $('td.design2-cell .raw .tx').text("Ta: " + this.dataset.design2ToxicityAbsolute);
-  $('td.design2-cell .raw .tn').text("Tn: " + this.dataset.design2ToxicityNormalised);
+  this.closest('td').querySelector('.raw .ca').textContent = "Ca: " + this.dataset.design2CarbonAbsolute;
+  this.closest('td').querySelector('.raw .ta').textContent = "Ta: " + this.dataset.design2ToxicityAbsolute;
+  this.closest('td').querySelector('.raw .cn').textContent = 'Cn: '+ round(this.dataset.design2CarbonNormalised,2);
+  this.closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(this.dataset.design2ToxicityNormalised,2)
 }
 function design3TextInputChange(e) 
 {
-  console.log("design3TextInputChange");
+  //console.log("design3TextInputChange");
   this.dataset.design3CarbonAbsolute = removeExponent((partSelected.dataset.partCarbonEmission * this.value));
   this.dataset.design3ToxicityAbsolute = removeExponent((partSelected.dataset.partHumanToxicity * this.value));
-
-
-  calcCarbonDesign3Normalisers();
-  $('td.design3-cell .raw .ca').text("Ca: " + this.dataset.design3CarbonAbsolute);
-  $('td.design3-cell .raw .cn').text("Cn: " + this.dataset.design3CarbonNormalised);
-  $('td.design3-cell .raw .tx').text("Ta: " + this.dataset.design3ToxicityAbsolute);
-  $('td.design3-cell .raw .tn').text("Tn: " + this.dataset.design3ToxicityNormalised);
+  
+  calcDesign3Normalisers();
+  
+  this.closest('td').querySelector('.raw .ca').textContent = "Ca: " + this.dataset.design3CarbonAbsolute;
+  this.closest('td').querySelector('.raw .ta').textContent = "Ta: " + this.dataset.design3ToxicityAbsolute;
+  this.closest('td').querySelector('.raw .cn').textContent = "Cn: " + round(this.dataset.design3CarbonNormalised,2);
+  this.closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(this.dataset.design3ToxicityNormalised,2);
 }
 
 /* carbon normalised 
  * = carbon absolute divided by the sum total of all carbon absolutes for design
 */
-function calcCarbonDesign1Normalisers()
+function calcDesign1Normalisers()
 {
   //get all elements of carbon raw values 
   var design1Element =  document.querySelectorAll(".design1");
@@ -130,14 +108,17 @@ function calcCarbonDesign1Normalisers()
   // TOTALs
   //loop thru absolute  values and total them up
   for(i = 0; i< design1Element.length; i++){  
+    //totalCa += parseFloat(design1Element[i].dataset.design1CarbonAbsolute);
     totalCa += parseFloat(design1Element[i].dataset.design1CarbonAbsolute);
     totalTa += parseFloat(design1Element[i].dataset.design1ToxicityAbsolute);   
   }
 
+  
   //remove scientic notation
   totalCa = removeExponent(totalCa);
   totalTa = removeExponent(totalTa);
  
+  
   //store normaliser 
   //store in data attrinute
   d1CaNormaliser.dataset.d1normaliser = totalCa;
@@ -146,6 +127,8 @@ function calcCarbonDesign1Normalisers()
   //store in global scope
   d1CaNormaliserValue = totalCa;
   d1TaNormaliserValue = totalTa;
+
+  console.log("Global stored Ca norm divisor =  " + totalCa);
 
   //show  the divisor
   $('#d1CaNormaliser').text("Ca norm divisor:" + totalCa);
@@ -160,7 +143,7 @@ function calcCarbonDesign1Normalisers()
 
 }
 
-function calcCarbonDesign2Normalisers()
+function calcDesign2Normalisers()
 {
   //get all elements of carbon raw values 
   var design2Element =  document.querySelectorAll(".design2");
@@ -200,7 +183,7 @@ function calcCarbonDesign2Normalisers()
   }
 
 }
-function calcCarbonDesign3Normalisers()
+function calcDesign3Normalisers()
 {
   //get all elements of carbon raw values 
   var design3Element =  document.querySelectorAll(".design3");
@@ -240,8 +223,7 @@ function calcCarbonDesign3Normalisers()
   }
 }
 
-
-function removeExponent(value) {
+  function removeExponent(value) {
   // if value is not a number try to convert it to number
   if (typeof value !== "number") {
       value = parseFloat(value);
@@ -317,6 +299,88 @@ document.getElementById('switch').addEventListener('click', function() {
     }
   }
 });
+
+//event input filter
+function validate(e) {
+  
+  var charCode = e.keyCode? e.keyCode : e.charCode
+  if (!(charCode >= 48 && charCode <= 57)) {
+      if(!(charCode>=37 && charCode<=40))
+          if(charCode!=8 && charCode!=46)
+          return false;
+  }
+}
+
+//other utility funcs
+
+// add new row from template
+$(function() {
+  $('#AddComponent').click(function(e) {
+    console.log("click");
+    e.preventDefault();
+    var row = 1;
+    // addRow('dataTable');
+    // var node = document.getElementById('template');
+    // table.row.add(rowtemp         
+    // ).draw(false);
+
+    var template = $('#template')
+      .clone()                        // CLONE THE TEMPLATE
+      .attr('id', 'row' + (row++))  
+      .attr('class', 'addedrow')   // MAKE THE ID UNIQUE
+      .prependTo($('#dataTable tbody'))
+      // .appendTo($('#dataTable tbody'))  // APPEND TO THE TABLE
+      .fadeIn(2000);                       // SHOW IT
+
+      // setTimeout(function(){
+      //   template.removeClass('addedrow');
+      // },2000);
+  });
+});
+
+// var addRowButton = document.querySelector("#AddComponent");
+// addRowButton.addEventListener("click", function(){
+//   addRow('dataTable');
+// });
+
+
+//datatable dynamic row add
+// function addRow(tableID) {
+//   // Get a reference to the table
+//   let tableRef = document.getElementById(tableID);
+
+//   // Insert a row at the end of the table
+//   let newRow = tableRef.insertRow(-1);
+
+//   // // Insert a cell in the row at index 0
+//   // let newCell = newRow.insertCell(0);
+
+//   // // Append a text node to the cell
+//   // let newText = document.createTextNode('New bottom row');
+//   // newCell.appendChild(newText);
+// }
+
+// select chnage listener
+// $('select').on('change', function (e) {
+//   var optionSelected = $("option:selected", this);
+//   var valueSelected = this.value;
+//   console.log(valueSelected);
+//   console.log(data);
+// });
+// // Call addRow() with the table's ID
+
+// function populatePartsList(valueSelected){
+//   var select = $('#parts');
+
+//         var listitems = '';
+        
+//         for(i = 0; i< partNames.length; i++){      
+//           console.log(partNames.componentName);
+//             listitems += '<option value=' + partNames.componentName + '>' + partNames.componentName + '</option>';
+//         };
+        
+       
+// }
 
 
 $('#dataTable').on('mouseover mouseout', '.dosomething', function(){
