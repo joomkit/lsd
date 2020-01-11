@@ -45,7 +45,10 @@
 #switch.on .fa-toggle-off{
   display:none;
 }
-
+.raw {
+  /* visibility:hidden; */
+  /* display:none; */
+}
 #switch.on > * .raw{
   /* visibility:visible */
   display:block;
@@ -294,8 +297,8 @@
             </tr>
           </tfoot>
           <tbody>
-            <tr id="" class="comp-row">
-             <td><i class="fas fa-minus-circle deleterow" onclick = "deleteRow(this)"></i></td>
+            <tr id="0" class="comp-row">
+             <td><i class="fas fa-minus-circle deleterow"></i></td>
               <td> 
                 <div class="form-group mb-0">
                   <label class="sr-only" for="component">component select</label>
@@ -318,57 +321,49 @@
               </td>
               <td class="design design1-cell">
                 <div class="input-group mb-3">
-                  <input type="number" value="0" class="form-control design" 
-                  data-design1-part-name=""  
-                  data-design1-carbon-normalised=""  
-                  data-design1-carbon-absolute="" 
-                  data-design1-toxicity-normalised="" 
-                  data-design1-toxicity-absolute="" >
+                  <select class="custom-select design" data-design1-normalised="" data-design1-actual="" disabled>
+                    <option selected>Choose...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
                   <div class="input-group-append">
-                  <span class="input-group-text"> - </span>
+                    <label class="input-group-text unit-label" for="unit">-</label>
                   </div>
                 </div>
-                
               </td>
               <td class="design design2-cell">
                 <div class="input-group mb-3">
-                  <input type="number" value="0" class="form-control design" 
-                  data-design2-part-name=""  
-                  data-design2-carbon-normalised=""  
-                  data-design2-carbon-absolute="" 
-                  data-design2-toxicity-normalised="" 
-                  data-design2-toxicity-absolute="" >
+                  <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
+                    <option selected>Choose...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
                   <div class="input-group-append">
-                  <span class="input-group-text"> - </span>
+                    <label class="input-group-text unit-label" for="unit">-</label>
                   </div>
                 </div>
-                
               </td>
               <td class="design design3-cell">
                 <div class="input-group mb-3">
-                  <input type="number" value="0" class="form-control design" 
-                  data-design3-part-name=""  
-                  data-design3-carbon-normalised=""  
-                  data-design3-carbon-absolute="" 
-                  data-design3-toxicity-normalised="" 
-                  data-design3-toxicity-absolute="" >
+                  <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
+                    <option selected>Choose...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
                   <div class="input-group-append">
-                  <span class="input-group-text"> - </span>
+                    <label class="input-group-text unit-label" for="unit">-</label>
                   </div>
                 </div>
-               
                 
               </td>
             </tr>
           
             
-          
-            
-          </tbody>
-        </table>
-        <table id="" class="hide">
             <!-- template row -->
-            <tr id="" class="template" >    
+            <tr id="template" class="comp-row" style="display: none">    
               <td><i class="fas fa-minus-circle deleterow" onclick = "deleteRow(this)"></i></td>       
              <td> 
                   <div class="form-group mb-0">
@@ -382,7 +377,7 @@
                 <td>
                     <div class="form-group">
                         <label class="sr-only" for="part">part details</label>
-                          <select class="form-control part"  disabled>
+                          <select class="form-control part"  >
                             <option>Please Select</option>
                           </select>
                       </div>
@@ -392,56 +387,46 @@
                 </td>
                 <td class="design design1-cell">
                   <div class="input-group mb-3">
-                    <input type="number" value="0" class="form-control design" 
-                    data-design1-part-name=""  
-                    data-design1-carbon-normalised=""  
-                    data-design1-carbon-absolute="" 
-                    data-design1-toxicity-normalised="" 
-                    data-design1-toxicity-absolute="" >
+                    <select class="custom-select design" data-design1-normalised="" data-design1-actual=""  disabled>
+                      <option selected>Choose...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
                     <div class="input-group-append">
-                    <span class="input-group-text"> - </span>
+                      <label class="input-group-text unit-label" for="unit">-</label>
                     </div>
-                  </div>
-                  <div class="col-12 raw small"> 
-                    <div class="alert alert-primary ca" role="alert"></div>
-                    <div class="alert alert-primary cn" role="alert"></div>
-                    <div class="alert alert-primary ta" role="alert"></div>
-                    <div class="alert alert-primary tn" role="alert"></div>
                   </div>
                 </td>
                 <td class="design design2-cell">
                   <div class="input-group mb-3">
-                    <input type="number" value="0" class="form-control design" 
-                    data-design2-part-name=""  
-                    data-design2-carbon-normalised=""  
-                    data-design2-carbon-absolute="" 
-                    data-design2-toxicity-normalised="" 
-                    data-design2-toxicity-absolute="" >
+                    <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
+                      <option selected>Choose...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
                     <div class="input-group-append">
-                    <span class="input-group-text"> - </span>
+                      <label class="input-group-text unit-label" for="unit">-</label>
                     </div>
-                  </div>
-                  <div class="col-12 raw small"> 
-                    <div class="alert alert-primary ca" role="alert"></div>
-                    <div class="alert alert-primary cn" role="alert"></div>
-                    <div class="alert alert-primary ta" role="alert"></div>
-                    <div class="alert alert-primary tn" role="alert"></div>
                   </div>
                 </td>
                 <td class="design design3-cell">
                   <div class="input-group mb-3">
-                    <input type="number" value="0" class="form-control design" 
-                    data-design3-part-name=""  
-                    data-design3-carbon-normalised=""  
-                    data-design3-carbon-absolute="" 
-                    data-design3-toxicity-normalised="" 
-                    data-design3-toxicity-absolute="" >
+                    <select class="custom-select design" data-design2-normalised="" data-design2-actual="" disabled>
+                      <option selected>Choose...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
                     <div class="input-group-append">
-                    <span class="input-group-text"> - </span>
+                      <label class="input-group-text unit-label" for="unit">-</label>
                     </div>
                   </div>
-          </td>
+                </td>
               </tr>
+            
+          </tbody>
         </table>
       </div>
     </div>

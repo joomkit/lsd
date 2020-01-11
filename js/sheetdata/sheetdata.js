@@ -32,14 +32,15 @@ var uniqueComponentNames = [];
 var partValues = [];
 var unit;
 var activerow;
+var partsTargetSelect;//active parts select dropdown we are gong to update
 var partSelected; // select elemnt selected for part or type
 //var optionSelected; 
 
 //setup normaliser container variables
 
-var design1 = { normalised: "", actual: ""};
-var design2 = { normalised: "", actual: ""};
-var design3 = { normalised: "", actual: ""};
+// var design1 = { normalised: "", actual: ""};
+// var design2 = { normalised: "", actual: ""};
+// var design3 = { normalised: "", actual: ""};
 
 //get and set carbon
 var d1CaNormaliser = document.querySelector('#d1CaNormaliser');
@@ -122,9 +123,9 @@ function populateComponentSelect(uniqueNames)
   //console.log(data);
 }    
 
+//load part names
 function populatePartSelect(componentName,partsTargetSelect)
 {
-
   var select = partsTargetSelect.empty();
   var listitems = '<option>Please Select</option>';
   var partNames = [];
@@ -136,6 +137,10 @@ function populatePartSelect(componentName,partsTargetSelect)
     
     if(data[i][sheetLabels.componentType] === ''+componentName+''){   
       //  console.log(data[i][sheetLabels.componentName]);
+      // uniqueNames.push({
+      //   componentName:data[i][sheetLabels.componentName],
+      // });
+      
       partNames.push({
         componentType:data[i][sheetLabels.componentType],
         componentName:data[i][sheetLabels.componentName],          
@@ -150,9 +155,10 @@ function populatePartSelect(componentName,partsTargetSelect)
     // console.log(this.componentName);
     listitems += '<option value="' + this.componentName + '">' + this.componentName + '</option>';
   });
- 
+  // uniqueComponentNames[] = uniqueComponentNames
   select.append(listitems);   
 }
+
 
 function getPartValues(valueSelected)
 {
@@ -240,7 +246,7 @@ function getTemplateGrams(i)
   //start at 1
   i = i + 1;
   var gramsTemplate = '<div class="input-group mb-3">' +
-                        '<input type="number" class="form-control design'+i+'" '+
+                        '<input type="number" value="0" class="form-control design'+i+'" '+
                         'data-design'+i+'-part-name="'+ partValues.componentName +'" '+ 
                         'data-design'+i+'-carbon-normalised="" '+ 
                         'data-design'+i+'-carbon-absolute="" ' +
@@ -343,10 +349,6 @@ function setListeners(unit,optionSelected)
      var design2TextInput = document.querySelector('input.design2');
      var design3TextInput = document.querySelector('input.design3');
 
-    //reset active partSelected
-
-   
-
     design1TextInput.addEventListener('focusin', function(event){
       event.target.style.background = 'pink';   
       partSelectEl = $(this).closest('tr').find('select.part');
@@ -355,9 +357,27 @@ function setListeners(unit,optionSelected)
 
     design1TextInput.addEventListener('focusout', (event) => {
       event.target.style.background = '';    
-      
+    });
+
+    design2TextInput.addEventListener('focusin', function(event){
+      event.target.style.background = 'pink';   
+      partSelectEl = $(this).closest('tr').find('select.part');
+      partSelected = partSelectEl[0];
+    });
+
+    design2TextInput.addEventListener('focusout', (event) => {
+      event.target.style.background = '';    
     });
   
+    design3TextInput.addEventListener('focusin', function(event){
+      event.target.style.background = 'pink';   
+      partSelectEl = $(this).closest('tr').find('select.part');
+      partSelected = partSelectEl[0];
+    });
+
+    design3TextInput.addEventListener('focusout', (event) => {
+      event.target.style.background = '';    
+    });
 
 
     //  design1TextInput.dataset.design1CarbonAbsolute = removeExponent(partSelected.dataset.partCarbonEmission);
@@ -371,6 +391,9 @@ function setListeners(unit,optionSelected)
      design2TextInput.oninput = design2TextInputChange;
      design3TextInput.oninput = design3TextInputChange;
 
+
+     buildChartData();
+     getGoogleChartRowData();
   // if (unit.indexOf('pc') > -1)
   // {
   //   unit = "pcs";

@@ -1,0 +1,67 @@
+function addRow() {
+  console.log("addrow")
+
+  tabletarget = document.querySelector('#dataTable');
+  target = document.querySelector('#dataTable tbody');
+  rowindex = tabletarget.rows;
+  console.log(tabletarget.rows);
+  source = document.querySelector('.template').cloneNode(true);
+
+  target.prepend(source);
+  
+  source.classList.add('addedrow')
+  fadeIn(source,500);
+
+}
+
+document.querySelector('#AddComponent').addEventListener('click', addRow);
+
+
+/*
+* Build chart data
+*/
+function buildChartData()
+{
+  console.log(typeof partsTargetSelect);
+  var sel = partsTargetSelect[0];
+  
+  uniqueComponentNames = [];
+  for (var i=0, n=sel.options.length;i<n;i++) { // looping over the options
+    uniqueComponentNames.push(sel.options[i].value);
+  }
+
+    var str = JSON.stringify(uniqueComponentNames, undefined, 9); // spacing level = 2
+    output(syntaxHighlight(str));
+    console.log();
+ 
+}
+
+function getGoogleChartRowData(){
+  console.log("gchart");
+    var dtable = document.querySelector('#dataTable tbody');
+    console.log(dtable);
+    var rows = dtable.rows;
+
+    for(var i =0 ; i < rows.length;i++ ){
+      console.log('row'+ [i]);
+    }
+}
+
+// Native fadeIn
+function fadeIn(elem, ms) {
+  elem.style.opacity = 0;
+
+  if (ms) {
+    let opacity = 0;
+    const timer = setInterval(function() {
+      opacity += 50 / ms;
+      if (opacity >= 1) {
+        clearInterval(timer);
+        opacity = 1;
+      }
+      elem.style.opacity = opacity;
+    }, 50);
+  } else {
+    elem.style.opacity = 1;
+  }
+}

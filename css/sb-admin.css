@@ -265,9 +265,7 @@ textarea {
 select.form-control.part{
   max-width:280px;
 }
-select.form-control.component-type{
 
-}
 select>option{
   max-width: 200px;
 }

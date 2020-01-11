@@ -1,0 +1,154 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+google.charts.load('current', {
+  callback: drawChart,
+  packages:['corechart']
+});
+
+function drawChart() {
+  var myHeight = 350;
+   var data = google.visualization.arrayToDataTable([
+        ['TYPE','BATTERY', 'CABLE', 'DONGLE', 'ELASTOMERS', 'FEET','METAL', 'PLASTIC FOAM', 'PLASTIC SHEET/FILM','RIGID PLASTIC','PCBA'], // columns
+        ['DESIGN 1', 0.000 , 0.338 , 0.573 , 0.056 , 0.005 , 0.000 , 0.002 , 0.002 , 0.022 , 0.001], //rows
+        ['DESIGN 2', 0.000 , 0.676,1.146 , 0.111 , 0.011 , 0.000 , 0.004 , 0.005 , 0.044 , 0.002],
+        ['DESIGN 3', 0.000,1.014,1.719 , 0.167 , 0.016 , 0.000 , 0.006 , 0.007 , 0.066 , 0.004 ]
+        ]);
+
+  var view = new google.visualization.DataView(data);
+  view.setColumns([
+  	0, //
+    1, {
+      calc: function (dt, row) {
+        return dt.getValue(row, 1);
+      },
+      type: "number",
+      role: "annotation"
+    },
+    2, {
+      calc: function (dt, row) {
+        return dt.getValue(row, 2);
+      },
+      type: "number",
+      role: "annotation"
+    },
+   3, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 3);
+  },
+  type: "number",
+  role: "annotation"
+},
+4, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 4);
+  },
+  type: "number",
+  role: "annotation"
+},
+5, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 5);
+  },
+  type: "number",
+  role: "annotation"
+},
+6, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 6);
+  },
+  type: "number",
+  role: "annotation"
+},
+7, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 7);
+  },
+  type: "number",
+  role: "annotation"
+},
+8, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 8);
+  },
+  type: "number",
+  role: "annotation"
+},
+9, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 9);
+  },
+  type: "number",
+  role: "annotation"
+},
+10, {
+  calc: function (dt, row) {
+	return dt.getValue(row, 10);
+  },
+  type: "number",
+  role: "annotation"
+},
+
+  ]);
+
+
+  var options = {
+    animation:{
+      duration: 1000,
+      easing: 'out',
+      startup: true
+    },
+    title: 'Carbon and toxicity',
+    backgroundColor: 'transparent',
+    height: myHeight, width: 1200,
+    legend: {
+      position: 'top',
+      maxLines: 3
+    },
+    bar: { groupWidth: '75%' },
+    isStacked: 'percent',
+    hAxis: {
+            minValue: 0,
+            ticks: [0, 0.3, 0.6, 0.9, 1]
+          },
+    series: {
+      2: {
+        annotations: {
+          stem: {
+            color: "transparent",
+          },
+          textStyle: {
+            color: "#000000",
+          }
+        },
+        enableInteractivity: false,
+        tooltip: "none",
+        visibleInLegend: false
+      }
+    }
+  };
+  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+  google.visualization.events.addListener(chart, 'animationfinish', function () {
+    $('#registrations_chart text[fill="#000000"]').each(function (index, annotation) {
+      if (!isNaN(parseFloat(annotation.textContent))) {
+        var yCoord = parseFloat($(annotation).attr('y'));
+        $(annotation).attr('y', yCoord + 18);
+      }
+    });
+  });
+
+  chart.draw(view, options);
+}
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div" style="min-width:600px;"></div>
+  </body>
+</html>

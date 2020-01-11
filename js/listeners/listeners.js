@@ -44,14 +44,6 @@ function round(value, decimals) {
 
 function design1TextInputChange(e) 
 {
-
-  //reset debug display
-  this.closest('td').querySelector('.raw .ca').textContent = "";
-  this.closest('td').querySelector('.raw .ta').textContent = "";
-  this.closest('td').querySelector('.raw .cn').textContent = "";
-  this.closest('td').querySelector('.raw .tn').textContent = "";
-
-
   //set active partSelect from same row
   console.log(partSelected.dataset);
   //remove scientific notation
@@ -62,10 +54,7 @@ function design1TextInputChange(e)
   calcDesign1Normalisers();
   console.log(this.dataset.design1ToxicityNormalised);
 
-  this.closest('td').querySelector('.raw .ca').textContent = "Ca: " + this.dataset.design1CarbonAbsolute;
-  this.closest('td').querySelector('.raw .ta').textContent = "Ta: " + this.dataset.design1ToxicityAbsolute;
-  this.closest('td').querySelector('.raw .cn').textContent = 'Cn: '+ round(this.dataset.design1CarbonNormalised, 2);
-  this.closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(this.dataset.design1ToxicityNormalised, 2);
+
 }
 
 function design2TextInputChange(e) 
@@ -93,6 +82,14 @@ function design3TextInputChange(e)
   this.closest('td').querySelector('.raw .cn').textContent = "Cn: " + round(this.dataset.design3CarbonNormalised,2);
   this.closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(this.dataset.design3ToxicityNormalised,2);
 }
+/*
+* Build chart data
+*/
+function buildChartData(El)
+{
+  
+}
+
 
 /* carbon normalised 
  * = carbon absolute divided by the sum total of all carbon absolutes for design
@@ -139,8 +136,13 @@ function calcDesign1Normalisers()
   for(i = 0; i< design1Element.length; i++){  
     design1Element[i].dataset.design1CarbonNormalised = (design1Element[i].dataset.design1CarbonAbsolute / totalCa);
     design1Element[i].dataset.design1ToxicityNormalised = (design1Element[i].dataset.design1ToxicityAbsolute / totalTa);
+    //set debug values
+    design1Element[i].closest('td').querySelector('.raw .ca').textContent = "Ca: " + design1Element[i].dataset.design1CarbonAbsolute;
+    design1Element[i].closest('td').querySelector('.raw .ta').textContent = "Ta: " + design1Element[i].dataset.design1ToxicityAbsolute;
+    design1Element[i].closest('td').querySelector('.raw .cn').textContent = 'Cn: '+ round(design1Element[i].dataset.design1CarbonNormalised, 2);
+    design1Element[i].closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(design1Element[i].dataset.design1ToxicityNormalised, 2);
   }
-
+  buildChartData()
 }
 
 function calcDesign2Normalisers()
@@ -180,6 +182,12 @@ function calcDesign2Normalisers()
   for(i = 0; i< design2Element.length; i++){  
     design2Element[i].dataset.design2CarbonNormalised = (design2Element[i].dataset.design2CarbonAbsolute / totalCa);
     design2Element[i].dataset.design2ToxicityNormalised = (design2Element[i].dataset.design2ToxicityAbsolute / totalTa);
+    //set debug values
+    design2Element[i].closest('td').querySelector('.raw .ca').textContent = "Ca: " + design2Element[i].dataset.design2CarbonAbsolute;
+    design2Element[i].closest('td').querySelector('.raw .ta').textContent = "Ta: " + design2Element[i].dataset.design2ToxicityAbsolute;
+    design2Element[i].closest('td').querySelector('.raw .cn').textContent = 'Cn: '+ round(design2Element[i].dataset.design2CarbonNormalised, 2);
+    design2Element[i].closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(design2Element[i].dataset.design2ToxicityNormalised, 2);
+
   }
 
 }
@@ -220,6 +228,11 @@ function calcDesign3Normalisers()
   for(i = 0; i< design3Element.length; i++){  
     design3Element[i].dataset.design3CarbonNormalised = (design3Element[i].dataset.design3CarbonAbsolute / totalCa);
     design3Element[i].dataset.design3ToxicityNormalised = (design3Element[i].dataset.design3ToxicityAbsolute / totalTa);
+    //set debug values
+    design3Element[i].closest('td').querySelector('.raw .ca').textContent = "Ca: " + design3Element[i].dataset.design3CarbonAbsolute;
+    design3Element[i].closest('td').querySelector('.raw .ta').textContent = "Ta: " + design3Element[i].dataset.design3ToxicityAbsolute;
+    design3Element[i].closest('td').querySelector('.raw .cn').textContent = 'Cn: '+ round(design3Element[i].dataset.design3CarbonNormalised, 3);
+    design3Element[i].closest('td').querySelector('.raw .tn').textContent = "Tn: " + round(design3Element[i].dataset.design3ToxicityNormalised, 3);
   }
 }
 
@@ -312,6 +325,73 @@ function validate(e) {
 }
 
 //other utility funcs
+// function addRow() {
+//   console.log("addrow")
+
+//   tabletarget = document.querySelector('#dataTable');
+//   target = document.querySelector('#dataTable tbody');
+//   rowindex = tabletarget.rows;
+//   console.log(tabletarget.rows);
+//   source = document.querySelector('.template').cloneNode(true);
+
+//   target.prepend(source);
+  
+//   source.classList.add('addedrow')
+//   fadeIn(source,500);
+
+// }
+
+// document.querySelector('#AddComponent').addEventListener('click', addRow);
+
+
+/*
+* Build chart data
+*/
+function buildChartData()
+{
+  console.log(typeof partsTargetSelect);
+  var sel = partsTargetSelect[0];
+  
+  uniqueComponentNames = [];
+  for (var i=0, n=sel.options.length;i<n;i++) { // looping over the options
+    uniqueComponentNames.push(sel.options[i].value);
+  }
+
+    var str = JSON.stringify(uniqueComponentNames, undefined, 9); // spacing level = 2
+    output(syntaxHighlight(str));
+    console.log();
+ 
+}
+
+function getGoogleChartRowData(){
+  console.log("gchart");
+    var dtable = document.querySelector('#dataTable tbody');
+    console.log(dtable);
+    var rows = dtable.rows;
+
+    for(var i =0 ; i < rows.length;i++ ){
+      console.log('row'+ [i]);
+    }
+}
+
+// Native fadeIn
+function fadeIn(elem, ms) {
+  elem.style.opacity = 0;
+
+  if (ms) {
+    let opacity = 0;
+    const timer = setInterval(function() {
+      opacity += 50 / ms;
+      if (opacity >= 1) {
+        clearInterval(timer);
+        opacity = 1;
+      }
+      elem.style.opacity = opacity;
+    }, 50);
+  } else {
+    elem.style.opacity = 1;
+  }
+}
 
 // add new row from template
 $(function() {
@@ -324,7 +404,7 @@ $(function() {
     // table.row.add(rowtemp         
     // ).draw(false);
 
-    var template = $('#template')
+    var template = $('tr.template')
       .clone()                        // CLONE THE TEMPLATE
       .attr('id', 'row' + (row++))  
       .attr('class', 'addedrow')   // MAKE THE ID UNIQUE
