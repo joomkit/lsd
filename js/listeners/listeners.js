@@ -359,7 +359,7 @@ function buildChartData()
 
     var str = JSON.stringify(uniqueComponentNames, undefined, 9); // spacing level = 2
     output(syntaxHighlight(str));
-    console.log();
+    console.log(uniqueComponentNames);
  
 }
 
